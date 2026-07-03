@@ -29,3 +29,4 @@ skills update
 | Skill | Descrição |
 |-------|-----------|
 | `daltonlab-lp-conversion` | Diagnóstico e construção de landing pages de alta conversão — ICP psicográfico, níveis de consciência de Schwartz, checklist tático |
+| `llm-council` | Roda uma decisão por um conselho de 5 conselheiros com lentes de pensamento distintas, peer-review anônimo e síntese final de um chairman (metodologia LLM Council do Karpathy) |
