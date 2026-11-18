@@ -23,12 +23,12 @@ A PM não precisa preencher nada. Ela só cola o pedido.
    ```
    📌 [Cliente] Tipo: título
    👤 Dev · 🏷️ tag · ⚡ prioridade
-   ⏱️ 8 h — motivo em uma linha
+   ⏱️ M · 2 h — motivo em uma linha
    📂 Lista: Backlog / Sprint N
    ✅ Pronto quando: [critério em uma linha]
    ```
    A descrição completa fica guardada; só mostrar se a PM pedir ("mostra a descrição").
-4. **A PM responde "pode criar"** (ou corrige: "é 4 h", "é do Thiago"). Só então Claude:
+4. **A PM responde "pode criar"** (ou corrige: "é P", "é do Thiago"). Só então Claude:
    - cria a task no ClickUp;
    - **avisa no Slack, canal `#sla-tech`, marcando o dev responsável** (ver "Aviso no Slack");
    - devolve à PM os 2 links (task + mensagem), em uma linha.
@@ -148,31 +148,32 @@ Preencher na criação; mostrar à PM junto com o rascunho.
 | Tag | Tag do cliente/produto, minúscula com hífen (ex.: `unymos`, `dalton-varejo`, `jeisys-education`). Usar tag existente; não inventar variação. |
 | Responsável | Sempre um dev. Se a PM ainda não decidiu, perguntar — **não criar task sem dono na sprint**. |
 | Prioridade | **Urgente:** cliente parado ou dado errado em produção. **Alta:** compromisso com data ou bloqueia outra task. **Normal:** padrão. **Baixa:** melhoria sem prazo. |
-| Estimativa | **Obrigatória. Claude gera** na escala 1 / 4 / 8 / 16 h (ver "Como estimar") e a PM só valida. Nunca subir task sem estimativa. |
+| Estimativa | **Obrigatória. Claude gera** na escala P 30 min / M 2 h / G 4 h / GG 8 h (ver "Como estimar") e a PM só valida. Nunca subir task sem estimativa. |
 | Data de entrega | Só quando houver compromisso real (demo, contrato, cliente). Não inventar. |
 | Tipo | O mesmo do título (Bug/Feature/Ajuste/UX/Op/Discovery). Se o espaço tiver campo "Tipo", preencher também. |
 
 ## Como estimar (Claude gera, PM valida)
 
-A mesma escala do painel KPIs da Carteira:
+Os devs da Dalton Lab trabalham com IA e são rápidos. Estimar o tempo **real de um dev do time**, não o de um dev "médio de mercado". Errar para mais infla o painel de esforço.
 
-| Estimativa | Quando usar |
-|---|---|
-| **1 h** — Pequena | Trocar texto, cor, configuração, um prompt simples. Sem investigação. |
-| **4 h** — Média | Ajuste em uma tela ou um fluxo; bug com causa já conhecida. |
-| **8 h** — Grande | Feature pequena; bug que precisa investigar; mexe em 2–3 partes do sistema. |
-| **16 h** — Muito grande | Feature com várias telas, integração externa ou carga de dados. |
+| Tamanho | Tempo | Quando usar |
+|---|---|---|
+| **P** | **30 min** | Trocar texto, cor, configuração ou instrução do prompt; bug com causa óbvia; pedir um dado novo na conversa e usar numa integração que já existe. |
+| **M** | **2 h** | Ajuste num fluxo inteiro (conversa + o que ela dispara); bug com causa conhecida que mexe em 2 lugares. |
+| **G** | **4 h** | Feature pequena; bug que precisa investigar a causa; mexe em 3+ partes do sistema. |
+| **GG** | **8 h** | Feature com várias telas, integração externa nova ou carga de dados. |
 
-- Escolher sempre um desses 4 valores (nada de 2 h, 6 h, 12 h).
-- Dar **uma linha de motivo** (ex.: "8 h: bug sem causa confirmada, envolve n8n + painel").
-- Na dúvida entre dois tamanhos, escolher o **maior**.
+- Escolher sempre um desses 4 tamanhos.
+- Na ficha, escrever tamanho + tempo + **uma linha de motivo** (ex.: "G · 4 h — bug sem causa confirmada, envolve n8n + painel").
+- Na dúvida entre dois tamanhos, escolher o **menor**; a PM sobe se precisar.
+- Se a PM disser quanto o dev leva ("o Thiago faz em 1 h"), usar o tamanho mais próximo e não discutir.
 - Se a skill `triagem-de-tasks` estiver disponível, pode usar o histórico do dev para calibrar.
-- Acima de 16 h → não estimar; propor a quebra (regra abaixo).
+- Acima de 8 h → não estimar; propor a quebra (regra abaixo).
 
 ## Regra de tamanho
 
 Quebrar em mais de uma task (ou task-mãe + subtasks) quando **qualquer** item abaixo for verdadeiro:
-- estimativa acima de **16 h**;
+- estimativa acima de **8 h** (GG);
 - mais de **5 cenários** no RESULTADO ESPERADO;
 - mistura tipos (ex.: Bug + Feature nova);
 - partes que podem ir para produção separadas.
@@ -189,7 +190,7 @@ Quebrar em mais de uma task (ou task-mãe + subtasks) quando **qualquer** item a
 - [ ] Se tem BLOQUEIO: dono + desde quando + próxima cobrança
 - [ ] Ficha completa (lista, tag, responsável, prioridade, estimativa)
 - [ ] Estimativa gerada por mim, com uma linha de motivo
-- [ ] Cabe em ≤ 16 h, senão propus a quebra
+- [ ] Cabe em ≤ 8 h, senão propus a quebra
 - [ ] Hipóteses técnicas estão em NOTAS TÉCNICAS, marcadas como hipótese
 - [ ] Depois de criar: aviso postado no `#sla-tech` com o dev marcado
 
@@ -197,7 +198,7 @@ Quebrar em mais de uma task (ou task-mãe + subtasks) quando **qualquer** item a
 
 **Título:** `[UNYMOS-0008] [Unymos] Bug: IA repete "Você já está com um atendente" e transbordo não acontece em sessão aberta`
 
-**Ficha:** Lista Sprint atual (urgente) · Tag `unymos` · Responsável Fabio · Prioridade Alta · Estimativa 8 h (bug sem causa confirmada, envolve n8n + painel)
+**Ficha:** Lista Sprint atual (urgente) · Tag `unymos` · Responsável Fabio · Prioridade Alta · Estimativa G · 4 h (bug sem causa confirmada, envolve n8n + painel)
 
 ```markdown
 ## CONTEXTO
