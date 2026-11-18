@@ -31,3 +31,4 @@ skills update
 | `daltonlab-lp-conversion` | Diagnóstico e construção de landing pages de alta conversão — ICP psicográfico, níveis de consciência de Schwartz, checklist tático |
 | `llm-council` | Roda uma decisão por um conselho de 5 conselheiros com lentes de pensamento distintas, peer-review anônimo e síntese final de um chairman (metodologia LLM Council do Karpathy) |
 | `task-builder` | Estrutura padronizada para escrever tarefas técnicas claras e executáveis para equipes de desenvolvimento (ClickUp, Linear, Notion, Jira ou texto livre) |
+| `task-builder-v2` | Versão 2 da task-builder: modo rápido (cola o pedido → ficha de 5 linhas → "pode criar"), estimativa gerada pelo Claude na escala 1/4/8/16h, busca de duplicata, bloqueio com dono e data e seção "Como validar". A `task-builder` original continua disponível |
