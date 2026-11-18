@@ -1,6 +1,6 @@
 ---
 name: task-builder-v2
-description: Versão 2 da task-builder da Dalton Lab. Escreve tarefas técnicas claras para o time de dev E preenche a ficha da task no ClickUp (cliente/tag, tipo, prioridade, estimativa, lista, responsável), quebra tasks grandes, registra bloqueio com dono e data, e diz como validar. Use quando a usuária pedir para criar, redigir, revisar ou estruturar uma task para desenvolvedor, transformar um chamado/reunião/pedido de cliente em task, ou disser "task-builder v2", "cria a task", "escreve a task", "abre task no ClickUp".
+description: Versão 2 da task-builder da Dalton Lab. Escreve tarefas técnicas claras para o time de dev E preenche a ficha da task no ClickUp (cliente/tag, tipo, prioridade, estimativa, lista, responsável), quebra tasks grandes, registra bloqueio com dono e data, diz como validar e, depois de criar, avisa no canal #sla-tech do Slack marcando o dev. Use quando a usuária pedir para criar, redigir, revisar ou estruturar uma task para desenvolvedor, transformar um chamado/reunião/pedido de cliente em task, ou disser "task-builder v2", "cria a task", "escreve a task", "abre task no ClickUp".
 ---
 
 # Task Builder v2
@@ -28,7 +28,11 @@ A PM não precisa preencher nada. Ela só cola o pedido.
    ✅ Pronto quando: [critério em uma linha]
    ```
    A descrição completa fica guardada; só mostrar se a PM pedir ("mostra a descrição").
-4. **A PM responde "pode criar"** (ou corrige: "é 4 h", "é do Thiago"). Só então Claude cria no ClickUp e devolve o link.
+4. **A PM responde "pode criar"** (ou corrige: "é 4 h", "é do Thiago"). Só então Claude:
+   - cria a task no ClickUp;
+   - **avisa no Slack, canal `#sla-tech`, marcando o dev responsável** (ver "Aviso no Slack");
+   - devolve à PM os 2 links (task + mensagem), em uma linha.
+   O "pode criar" já vale para os dois passos; não perguntar de novo.
 
 Regras do modo rápido:
 - Nada de parágrafos explicando o que vai fazer. Ficha e pronto.
@@ -52,6 +56,27 @@ Regras do modo rápido:
 4. **Escrever o corpo** no template abaixo.
 5. **Montar a ficha** (campos do ClickUp, fora da descrição).
 6. **Mostrar o rascunho à PM e só criar no ClickUp depois do "pode criar".**
+7. **Avisar no Slack** (`#sla-tech`), marcando o dev responsável.
+
+## Aviso no Slack (#sla-tech)
+
+Depois de criar a task no ClickUp, postar **uma mensagem por task** no canal privado `#sla-tech`.
+
+- Achar o canal com a busca de canais do Slack pelo nome `sla-tech` (incluir canais privados).
+- Achar o dev com a busca de usuários do Slack pelo nome (ex.: "Thiago Andrade") e marcar com `<@ID_DO_DEV>`. Nunca escrever o nome solto: só a marcação avisa a pessoa.
+- Se não achar o dev no Slack, postar sem marcação e avisar a PM.
+- Mensagem curta (o time tem TDAH), neste formato:
+
+```
+🎫 Nova task para <@ID_DO_DEV>
+*[Cliente] Tipo: título*
+⚡ Prioridade · ⏱️ Estimativa · 📂 Lista
+✅ Pronto quando: [critério em uma linha]
+🔗 [link da task no ClickUp]
+```
+
+- Task urgente: começar com `🚨 URGENTE ·` antes de "Nova task".
+- Se a PM editar uma task já criada (trocar dev, prioridade), **não** postar de novo, a menos que ela peça.
 
 ## Título
 
@@ -166,6 +191,7 @@ Quebrar em mais de uma task (ou task-mãe + subtasks) quando **qualquer** item a
 - [ ] Estimativa gerada por mim, com uma linha de motivo
 - [ ] Cabe em ≤ 16 h, senão propus a quebra
 - [ ] Hipóteses técnicas estão em NOTAS TÉCNICAS, marcadas como hipótese
+- [ ] Depois de criar: aviso postado no `#sla-tech` com o dev marcado
 
 ## Exemplo curto
 
