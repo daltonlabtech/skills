@@ -23,7 +23,7 @@ A PM não precisa preencher nada. Ela só cola o pedido.
    ```
    📌 [Cliente] Tipo: título
    👤 Dev · 🏷️ tag · ⚡ prioridade
-   ⏱️ M · 2 h — motivo em uma linha
+   ⏱️ P · 1 h — motivo em uma linha
    📂 Lista: Backlog / Sprint N
    ✅ Pronto quando: [critério em uma linha]
    ```
@@ -148,32 +148,54 @@ Preencher na criação; mostrar à PM junto com o rascunho.
 | Tag | Tag do cliente/produto, minúscula com hífen (ex.: `unymos`, `dalton-varejo`, `jeisys-education`). Usar tag existente; não inventar variação. |
 | Responsável | Sempre um dev. Se a PM ainda não decidiu, perguntar — **não criar task sem dono na sprint**. |
 | Prioridade | **Urgente:** cliente parado ou dado errado em produção. **Alta:** compromisso com data ou bloqueia outra task. **Normal:** padrão. **Baixa:** melhoria sem prazo. |
-| Estimativa | **Obrigatória. Claude gera** na escala P 30 min / M 2 h / G 4 h / GG 8 h (ver "Como estimar") e a PM só valida. Nunca subir task sem estimativa. |
+| Estimativa | **Obrigatória. Claude gera** na escala P 1 h / M 4 h / G 8 h / GG 16 h (ver "Como estimar") e a PM só valida. Nunca subir task sem estimativa. |
 | Data de entrega | Só quando houver compromisso real (demo, contrato, cliente). Não inventar. |
 | Tipo | O mesmo do título (Bug/Feature/Ajuste/UX/Op/Discovery). Se o espaço tiver campo "Tipo", preencher também. |
 
 ## Como estimar (Claude gera, PM valida)
 
-Os devs da Dalton Lab trabalham com IA e são rápidos. Estimar o tempo **real de um dev do time**, não o de um dev "médio de mercado". Errar para mais infla o painel de esforço.
+Escala fixa, a mesma do painel KPIs da Carteira:
 
-| Tamanho | Tempo | Quando usar |
+| Tamanho | Tempo |
+|---|---|
+| **P** | 1 h |
+| **M** | 4 h |
+| **G** | 8 h |
+| **GG** | 16 h |
+
+O tempo não muda. O que importa é **classificar certo**. Os devs trabalham com IA e são rápidos: classificar pelo que a task **mexe**, não pelo quanto ela "parece importante" ou pela urgência.
+
+### Como classificar: 3 perguntas, nesta ordem
+
+1. **Já sabemos onde mexer?**
+   Não, precisa investigar a causa → no mínimo **G**.
+2. **Precisa de tela nova, integração nova ou carga de dados?**
+   Sim → **G** (uma coisa) ou **GG** (várias telas / integração externa nova).
+3. **Quantas partes do sistema mexe?** (ex.: prompt do agente, fluxo n8n, agenda, painel, banco)
+   1 parte, ou uma parte nova usando algo que já existe → **P** · 2 partes → **M** · 3 ou mais → **G**.
+
+### Exemplos reais (para calibrar)
+
+| Task | Tamanho | Por quê |
 |---|---|---|
-| **P** | **30 min** | Trocar texto, cor, configuração ou instrução do prompt; bug com causa óbvia; pedir um dado novo na conversa e usar numa integração que já existe. |
-| **M** | **2 h** | Ajuste num fluxo inteiro (conversa + o que ela dispara); bug com causa conhecida que mexe em 2 lugares. |
-| **G** | **4 h** | Feature pequena; bug que precisa investigar a causa; mexe em 3+ partes do sistema. |
-| **GG** | **8 h** | Feature com várias telas, integração externa nova ou carga de dados. |
+| [IPAlpha] agente pede o e-mail do fiel e envia convite na agenda dele | **P** | Onde mexer é conhecido; pede um dado novo e usa a integração de agenda que já existe |
+| Trocar texto, cor, instrução do prompt, configuração | **P** | Uma parte só |
+| Remarcação passa a atualizar a agenda e avisar no WhatsApp | **M** | Causa conhecida, 2 partes (agenda + mensagem) |
+| [Unymos] transbordo não acontece em sessão aberta | **G** | Causa não confirmada: precisa investigar |
+| [Jeisys] automação Google Drive → Cloudflare Stream | **GG** | Integração externa nova + carga de dados |
 
-- Escolher sempre um desses 4 tamanhos.
-- Na ficha, escrever tamanho + tempo + **uma linha de motivo** (ex.: "G · 4 h — bug sem causa confirmada, envolve n8n + painel").
+Regras:
+- Na ficha, escrever tamanho + tempo + **uma linha de motivo** respondendo às perguntas (ex.: "G · 8 h — causa não confirmada, envolve n8n + painel").
 - Na dúvida entre dois tamanhos, escolher o **menor**; a PM sobe se precisar.
+- Urgência **não** aumenta o tamanho. Urgente vai na prioridade.
 - Se a PM disser quanto o dev leva ("o Thiago faz em 1 h"), usar o tamanho mais próximo e não discutir.
 - Se a skill `triagem-de-tasks` estiver disponível, pode usar o histórico do dev para calibrar.
-- Acima de 8 h → não estimar; propor a quebra (regra abaixo).
+- Acima de GG → não estimar; propor a quebra (regra abaixo).
 
 ## Regra de tamanho
 
 Quebrar em mais de uma task (ou task-mãe + subtasks) quando **qualquer** item abaixo for verdadeiro:
-- estimativa acima de **8 h** (GG);
+- estimativa acima de **16 h** (GG);
 - mais de **5 cenários** no RESULTADO ESPERADO;
 - mistura tipos (ex.: Bug + Feature nova);
 - partes que podem ir para produção separadas.
@@ -189,8 +211,8 @@ Quebrar em mais de uma task (ou task-mãe + subtasks) quando **qualquer** item a
 - [ ] COMO VALIDAR diz quem aceita e onde testar
 - [ ] Se tem BLOQUEIO: dono + desde quando + próxima cobrança
 - [ ] Ficha completa (lista, tag, responsável, prioridade, estimativa)
-- [ ] Estimativa gerada por mim, com uma linha de motivo
-- [ ] Cabe em ≤ 8 h, senão propus a quebra
+- [ ] Tamanho classificado pelas 3 perguntas, com uma linha de motivo
+- [ ] Cabe em ≤ 16 h (GG), senão propus a quebra
 - [ ] Hipóteses técnicas estão em NOTAS TÉCNICAS, marcadas como hipótese
 - [ ] Depois de criar: aviso postado no `#sla-tech` com o dev marcado
 
@@ -198,7 +220,7 @@ Quebrar em mais de uma task (ou task-mãe + subtasks) quando **qualquer** item a
 
 **Título:** `[UNYMOS-0008] [Unymos] Bug: IA repete "Você já está com um atendente" e transbordo não acontece em sessão aberta`
 
-**Ficha:** Lista Sprint atual (urgente) · Tag `unymos` · Responsável Fabio · Prioridade Alta · Estimativa G · 4 h (bug sem causa confirmada, envolve n8n + painel)
+**Ficha:** Lista Sprint atual (urgente) · Tag `unymos` · Responsável Fabio · Prioridade Alta · Estimativa G · 8 h (causa não confirmada, envolve n8n + painel)
 
 ```markdown
 ## CONTEXTO
