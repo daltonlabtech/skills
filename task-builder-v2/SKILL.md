@@ -65,17 +65,25 @@ Depois de criar a task no ClickUp, postar **uma mensagem por task** no canal pri
 - Achar o canal com a busca de canais do Slack pelo nome `sla-tech` (incluir canais privados).
 - Achar o dev com a busca de usuários do Slack pelo nome (ex.: "Thiago Andrade") e marcar com `<@ID_DO_DEV>`. Nunca escrever o nome solto: só a marcação avisa a pessoa.
 - Se não achar o dev no Slack, postar sem marcação e avisar a PM.
-- Mensagem curta (o time tem TDAH), neste formato:
+- Mensagem curta e **limpa** (o time tem TDAH). **Sem emojis.** A hierarquia vem só da formatação do Slack:
+  - **negrito** para o título da task e para os valores-chave;
+  - `código` para os dados (prioridade, tamanho, lista), que ficam numa caixinha cinza fácil de achar com os olhos;
+  - _itálico_ para o critério de pronto;
+  - uma informação por linha e um link com texto ("Abrir no ClickUp"), nunca uma URL solta.
+
+Formato:
 
 ```
-🎫 Nova task para <@ID_DO_DEV>
+Nova task para <@ID_DO_DEV>
 *[Cliente] Tipo: título*
-⚡ Prioridade · ⏱️ Estimativa · 📂 Lista
-✅ Pronto quando: [critério em uma linha]
-🔗 [link da task no ClickUp]
+`Prioridade` · `P · 1 h` · `Sprint 31`
+Pronto quando: _[critério em uma linha]_
+[Abrir no ClickUp](link da task)
 ```
 
-- Task urgente: começar com `🚨 URGENTE ·` antes de "Nova task".
+- Task urgente: a primeira linha vira `*URGENTE* · Nova task para <@ID_DO_DEV>`. É a única marcação extra.
+- Várias tasks de uma vez: **uma mensagem só**, uma linha em branco entre as tasks, numeradas `1.` `2.` (sem emoji de número).
+- Avisos que não são task nova (ex.: "sprint criada"): mesma regra. Primeira linha em negrito dizendo o que aconteceu, depois no máximo 3 linhas.
 - Se a PM editar uma task já criada (trocar dev, prioridade), **não** postar de novo, a menos que ela peça.
 
 ## Título
