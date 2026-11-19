@@ -1,6 +1,6 @@
 ---
 name: task-builder-v2
-description: Versão 2 da task-builder da Dalton Lab. Escreve tarefas técnicas claras para o time de dev E preenche a ficha da task no ClickUp (cliente/tag, tipo, prioridade, estimativa, lista, responsável), quebra tasks grandes, registra bloqueio com dono e data, diz como validar e, depois de criar, avisa no canal #sla-tech do Slack marcando o dev. Use quando a usuária pedir para criar, redigir, revisar ou estruturar uma task para desenvolvedor, transformar um chamado/reunião/pedido de cliente em task, ou disser "task-builder v2", "cria a task", "escreve a task", "abre task no ClickUp".
+description: Versão 2 da task-builder da Dalton Lab. Escreve tarefas técnicas claras para o time de dev E preenche a ficha da task no ClickUp (cliente/tag, tipo, prioridade, estimativa, lista, responsável), quebra tasks grandes, registra bloqueio com dono e data, diz como validar e, depois de criar, avisa o dev responsável no privado do Slack. Descobre o dev pelo histórico do cliente no ClickUp. Use quando a usuária pedir para criar, redigir, revisar ou estruturar uma task para desenvolvedor, transformar um chamado/reunião/pedido de cliente em task, ou disser "task-builder v2", "cria a task", "escreve a task", "abre task no ClickUp".
 ---
 
 # Task Builder v2
@@ -16,13 +16,13 @@ A PM não precisa preencher nada. Ela só cola o pedido.
 1. **A PM cola o pedido** do jeito que vier: texto solto, áudio transcrito, link de chamado, trecho de reunião.
 2. **Claude faz no máximo 3 perguntas, numa mensagem só**, e só o que não deu para deduzir:
    - Qual cliente?
-   - Qual dev?
+   - Qual dev? (só se o histórico do ClickUp não resolver — ver "Como descobrir o dev")
    - É urgente?
    (Se já der para saber pelo pedido, não pergunta.)
 3. **Claude devolve a ficha em 5 linhas**, nada mais:
    ```
    📌 [Cliente] Tipo: título
-   👤 Dev · 🏷️ tag · ⚡ prioridade
+   👤 Dev (pelo histórico do cliente) · 🏷️ tag · ⚡ prioridade
    ⏱️ P · 1 h — motivo em uma linha
    📂 Lista: Backlog / Sprint N
    ✅ Pronto quando: [critério em uma linha]
@@ -30,7 +30,7 @@ A PM não precisa preencher nada. Ela só cola o pedido.
    A descrição completa fica guardada; só mostrar se a PM pedir ("mostra a descrição").
 4. **A PM responde "pode criar"** (ou corrige: "é P", "é do Thiago"). Só então Claude:
    - cria a task no ClickUp;
-   - **avisa no Slack, canal `#sla-tech`, marcando o dev responsável** (ver "Aviso no Slack");
+   - **avisa o dev responsável no privado do Slack** (ver "Aviso no Slack");
    - devolve à PM os 2 links (task + mensagem), em uma linha.
    O "pode criar" já vale para os dois passos; não perguntar de novo.
 
@@ -56,15 +56,24 @@ Regras do modo rápido:
 4. **Escrever o corpo** no template abaixo.
 5. **Montar a ficha** (campos do ClickUp, fora da descrição).
 6. **Mostrar o rascunho à PM e só criar no ClickUp depois do "pode criar".**
-7. **Avisar no Slack** (`#sla-tech`), marcando o dev responsável.
+7. **Avisar o dev no privado do Slack.**
 
-## Aviso no Slack (#sla-tech)
+## Como descobrir o dev
 
-Depois de criar a task no ClickUp, postar **uma mensagem por task** no canal privado `#sla-tech`.
+O dev padrão é **quem pega as tasks daquele cliente** no ClickUp. Assim a regra vale para todo o time e se atualiza sozinha quando um cliente muda de dev.
 
-- Achar o canal com a busca de canais do Slack pelo nome `sla-tech` (incluir canais privados).
-- Achar o dev com a busca de usuários do Slack pelo nome (ex.: "Thiago Andrade") e marcar com `<@ID_DO_DEV>`. Nunca escrever o nome solto: só a marcação avisa a pessoa.
-- Se não achar o dev no Slack, postar sem marcação e avisar a PM.
+1. Se a PM disse o dev, usar o que ela disse (a palavra dela vale mais que o histórico).
+2. Senão, buscar no espaço TechTeam as **últimas 10 tasks daquele cliente** (pela tag do cliente ou por `[Cliente]` no nome), criadas nos últimos 60 dias.
+3. O dev padrão é o responsável que **mais aparece** nessas tasks.
+4. Se não houver tasks, ou der empate, **perguntar** à PM ("Qual dev?").
+5. Na ficha, sempre deixar claro de onde veio: `Thiago (pelo histórico do cliente)` ou `Thiago (você indicou)`. Se a PM disser um dev diferente do histórico, avisar numa linha ("o histórico aponta o Fabio, uso o Thiago como você disse?").
+
+## Aviso no Slack (privado do dev)
+
+Depois de criar a task no ClickUp, mandar **mensagem no privado (DM) do dev responsável**. Não postar em canal.
+
+- Achar o dev com a busca de usuários do Slack pelo nome (ex.: "Thiago Andrade") e enviar a mensagem usando o ID dele como destino (isso abre o privado).
+- Se não achar o dev no Slack, não enviar e avisar a PM.
 - Mensagem curta e **limpa** (o time tem TDAH). **Sem emojis.** A hierarquia vem só da formatação do Slack:
   - **negrito** para o título da task e para os valores-chave;
   - `código` para os dados (prioridade, tamanho, lista), que ficam numa caixinha cinza fácil de achar com os olhos;
@@ -74,14 +83,14 @@ Depois de criar a task no ClickUp, postar **uma mensagem por task** no canal pri
 Formato:
 
 ```
-Nova task para <@ID_DO_DEV>
+*Nova task pra você*
 *[Cliente] Tipo: título*
 `Prioridade` · `P · 1 h` · `Sprint 31`
 Pronto quando: _[critério em uma linha]_
 [Abrir no ClickUp](link da task)
 ```
 
-- Task urgente: a primeira linha vira `*URGENTE* · Nova task para <@ID_DO_DEV>`. É a única marcação extra.
+- Task urgente: a primeira linha vira `*URGENTE* · Nova task pra você`. É a única marcação extra.
 - Várias tasks de uma vez: **uma mensagem só**, uma linha em branco entre as tasks, numeradas `1.` `2.` (sem emoji de número).
 - Avisos que não são task nova (ex.: "sprint criada"): mesma regra. Primeira linha em negrito dizendo o que aconteceu, depois no máximo 3 linhas.
 - Se a PM editar uma task já criada (trocar dev, prioridade), **não** postar de novo, a menos que ela peça.
@@ -154,7 +163,7 @@ Preencher na criação; mostrar à PM junto com o rascunho.
 |---|---|
 | Lista | Pedido novo → **Backlog**. Só vai para a sprint atual se a PM decidir na planning ou se for urgente. Chamado de cliente ainda não aprovado → lista **Chamados**. |
 | Tag | Tag do cliente/produto, minúscula com hífen (ex.: `unymos`, `dalton-varejo`, `jeisys-education`). Usar tag existente; não inventar variação. |
-| Responsável | Sempre um dev. Se a PM ainda não decidiu, perguntar — **não criar task sem dono na sprint**. |
+| Responsável | Sempre um dev, descoberto como em "Como descobrir o dev". **Não criar task sem dono na sprint**. |
 | Prioridade | **Urgente:** cliente parado ou dado errado em produção. **Alta:** compromisso com data ou bloqueia outra task. **Normal:** padrão. **Baixa:** melhoria sem prazo. |
 | Estimativa | **Obrigatória. Claude gera** na escala P 1 h / M 4 h / G 8 h / GG 16 h (ver "Como estimar") e a PM só valida. Nunca subir task sem estimativa. |
 | Data de entrega | Só quando houver compromisso real (demo, contrato, cliente). Não inventar. |
@@ -222,7 +231,8 @@ Quebrar em mais de uma task (ou task-mãe + subtasks) quando **qualquer** item a
 - [ ] Tamanho classificado pelas 3 perguntas, com uma linha de motivo
 - [ ] Cabe em ≤ 16 h (GG), senão propus a quebra
 - [ ] Hipóteses técnicas estão em NOTAS TÉCNICAS, marcadas como hipótese
-- [ ] Depois de criar: aviso postado no `#sla-tech` com o dev marcado
+- [ ] Dev veio da PM ou do histórico do cliente (e a ficha diz de onde)
+- [ ] Depois de criar: aviso enviado no privado do dev no Slack
 
 ## Exemplo curto
 
